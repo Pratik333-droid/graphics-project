@@ -1,4 +1,3 @@
-
 def matrix_multiplication(a, b):
     columns_a = len(a[0])
     rows_a = len(a)
