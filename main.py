@@ -87,6 +87,7 @@ while run:
             print("projected points = ", projected_points)
             pygame.draw.circle(screen, blue, (x, y), 10)
             # pygame.draw.circle(screen, blue, (100, 100), 10)
+            # PRINT HELLO WORLD
             index += 1
         #draw edges
         for m in range(4):
