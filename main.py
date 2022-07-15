@@ -94,8 +94,6 @@ while run:
         #draw edges
         for m in range(4):
             connect_point(m, (m+1)%4, projected_points)
-            print("this mofo runs")
-            # time.sleep(3)
             connect_point(m+4, (m+1)%4 + 4, projected_points)
             connect_point(m, m+4, projected_points)
         angle += speed
