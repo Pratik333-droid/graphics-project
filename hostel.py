@@ -75,19 +75,19 @@ def buildShape():
     if visible_surfaces[0] == 1:
         drawTop()
         print("top drawn")
-    else:
+    elif visible_surfaces[1] == 1:
         drawBottom()
         print("bottom drawn")
     if visible_surfaces[2] == 1:
         drawLeft()
         print("left drawn")
-    else:
+    elif visible_surfaces[3] == 1:
         drawRight()
         print("right drawn")
     if visible_surfaces[4] == 1:
         print("front drawn")
         drawFront()
-    else:
+    elif visible_surfaces[5] == 1:
         print("back drawn")
         drawBack()
     
@@ -219,7 +219,7 @@ while run:
             projected_points[index] = [x_cord, y_cord]
             index += 1
             # print("projected points = ", projected_points)
-            pygame.draw.circle(screen, blue, (x_cord, y_cord), 10)
+            # pygame.draw.circle(screen, blue, (x_cord, y_cord), 10)
             # print ("This")
         declareFaces(tamper_points)
         # print("faces = ",faces)
