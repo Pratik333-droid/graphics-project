@@ -1,7 +1,7 @@
-# 3D-perspective-projection-with-python-
-
-#### please check out my youtube channel : https://www.youtube.com/channel/UCjPk9YDheKst1FlAf_KSpyA
----
-## here are better versions which support faces and triangles: 
-#### - https://github.com/Josephbakulikira/Simple-3D-engine-pygame
-#### - https://github.com/Josephbakulikira/3D-engine-from-scraph--pygame
+This repo contains our project on computer graphics where we simulated our hostel building.
+We completed this project using python's pygame library.
+We are extremely thankful to all our teachers, lab instructors and collegues for their support and guidance.
+Our team consists of three members as mentioned below.
+Prashant Bhandari
+Pratik Dahal
+Rahul Jha
