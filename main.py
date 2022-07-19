@@ -123,13 +123,13 @@ def drawBack():
 
 def returnRotationMatrices(x, y, z):
     return_matrix = [[[1, 0, 0],
-                [0, math.cos(x), -math.sin(x)],
-                [0, math.sin(x), math.cos(x)]], 
-                [[math.cos(y), 0, -math.sin(y)],
+                [0, round(math.cos(x), 4), round(-math.sin(x), 4)],
+                [0, round(math.sin(x), 4), round(math.cos(x), 4)]], 
+                [[round(math.cos(y), 4), 0, round(-math.sin(y), 4)],
                 [0, 1, 0],
-                [math.sin(y), 0, math.cos(y)]],
-                [[math.cos(z), -math.sin(z), 0],
-                [math.sin(z), math.cos(z), 0],
+                [round(math.sin(y), 4), 0, round(math.cos(y), 4)]],
+                [[round(math.cos(z), 4), round(-math.sin(z), 4), 0],
+                [round(math.sin(z), 4), round(math.cos(z), 4), 0],
                 [0, 0, 1]]]
     return return_matrix
 

@@ -11,7 +11,7 @@ def matrix_multiplication(a, b):
                 sum = 0
                 for k in range(columns_a):
                     sum += a[x][k] * b[k][y]
-                result_matrix[x][y] = sum
+                result_matrix[x][y] = round(sum, 4)
         return result_matrix
 
     else:
