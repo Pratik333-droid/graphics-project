@@ -11,7 +11,7 @@ __pycache__/
 *.so
 
 #my own file
-/test.py
+test.py
 # Distribution / packaging
 .Python
 build/

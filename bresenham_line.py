@@ -3,8 +3,6 @@ import pygame
 from pygame import gfxdraw
 # import time
 
-
-
 def lineBanau(parda, cordy1, cordy2, color):
     
     x1 = cordy1[0]
@@ -27,7 +25,7 @@ def lineBanau(parda, cordy1, cordy2, color):
     # img.putpixel((x1,y1), (255, 255, 255, 255))
     # print("color = ",color)
     gfxdraw.pixel(parda, x1, y1, color)
-    pygame.display.update()
+    # pygame.display.update()
 
     if dx>= dy: #slope is less than or equal to 1
         pk = 2*dy - dx
@@ -43,7 +41,7 @@ def lineBanau(parda, cordy1, cordy2, color):
             
             # img.putpixel((xk,yk), (255, 255, 255, 255))
             gfxdraw.pixel(parda, xk, yk, color)
-            pygame.display.update()
+            # pygame.display.update()
             k += 1
 
     else:
@@ -60,5 +58,7 @@ def lineBanau(parda, cordy1, cordy2, color):
             
             # img.putpixel((xk,yk), (255, 255, 255, 255))
             gfxdraw.pixel(parda, xk, yk, color)
-            pygame.display.update()
+            # pygame.display.update()
             k += 1
+    
+    # pygame.display.update()

@@ -7,6 +7,7 @@ def dharkaKor(parda, color, cordy1, cordy2, motai):
     gfxdraw.pixel(parda, cordy1[0]+10, cordy1[1], color)
     pygame.draw.line(parda, color, cordy1, cordy2, motai)
 
+#yaha taw j gare pani hunxa. this file is under gitignore so any changes made here will be untracted
 if __name__ == "__main__":
     print("Holy shit this is not supposed to run")
     width, height = 800, 600

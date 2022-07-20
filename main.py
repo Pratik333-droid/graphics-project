@@ -2,6 +2,7 @@ import pygame
 import math
 from matrix import matrix_multiplication
 from visibleSurfaceDetection import returnVisibleSurfaces
+from bresenham_line import lineBanau
 import time
 # import os
 
@@ -56,12 +57,15 @@ def initializePoints():
     points[15] = [[-x2], [y2], [-z]]
 
 
-def connect_point(i, j, k):
-    a = k[i]
-    b = k[j]
-    pygame.draw.line(screen, white, (a[0], a[1]), (b[0], b[1]), 1)
+def connect_point(x_index, y_index, projected_2d_coordinates):
+    coordinate_x = projected_2d_coordinates[x_index]
+    coordinate_y = projected_2d_coordinates[y_index]
+    # pygame.draw.line(screen, white, (a[0], a[1]), (b[0], b[1]), 1)
+    lineBanau(screen, coordinate_x, coordinate_y, white)
 
 def buildShape():
+    # the following piece of code draws lines between all the vertices
+    # ---------------------------------------------------------------------------------
     # for m in range(4):
     #     connect_point(m, (m+1)%4, projected_points)
     #     connect_point(m+4, (m+1)%4 + 4, projected_points)
@@ -71,6 +75,8 @@ def buildShape():
     #     connect_point(m+4 + 8, (m+1)%4 + 4 +8, projected_points)
     #     connect_point(m + 8, m+4 + 8, projected_points)
     # print ("faces = ",faces)
+    # ---------------------------------------------------------------------------------
+
     visible_surfaces = returnVisibleSurfaces(faces, camera)
     if visible_surfaces[0] == 1:
         drawTop()
@@ -197,7 +203,7 @@ while run:
     if hit == True:
         tamper_points = []
         index = 0
-        pygame.draw.circle(screen, green, (int(camera['x']*scale + cube_position[0]), int(camera['y']*scale + cube_position[1])), 10)
+        
         for point in points:
             distance = 6
             z_cord = 1/(distance - 0.2*point[2][0]) #point[2][0] means z coordinate of the point
@@ -224,6 +230,7 @@ while run:
         declareFaces(tamper_points)
         # print("faces = ",faces)
         buildShape()
+        pygame.draw.circle(screen, green, (int(camera['x']*scale + cube_position[0]), int(camera['y']*scale + cube_position[1])), 10)
         pygame.display.update()
 
 # time.sleep(15)
