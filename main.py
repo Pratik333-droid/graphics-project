@@ -23,7 +23,7 @@ angle_x, angle_y = 0.0, 0.0
 projected_points = [_ for _ in range(16)]
 run = True
 x_cordy = 2
-camera = {'x': 0.0,'y': 0.0,'z': 5.0}
+camera = {'x': 0.0,'y': 0.0,'z': 6.0}
 x, y, z = 1, 1, 1.5
 x2, y2 = 2, 2
 tamper_points = []
@@ -193,8 +193,8 @@ while run:
         hit = True
     elif keys[pygame.K_DOWN]:
         camera['z'] -= 0.5 * 0.05
-        if camera['z'] < 1.51:
-            camera['z'] = 1.51
+        if camera['z'] < 1.55:
+            camera['z'] = 1.55
         angle_x = returnAngle(camera['y'], camera['z'] - z)
         angle_y = returnAngle(camera['x'], camera['z'] - z)
         # angle_z -= 0.05
@@ -205,7 +205,7 @@ while run:
         initializePoints()
         print("Points initialized")
         print("points = ", points)
-        camera = {'x': 0.,'y': 0.,'z': 5.0}
+        camera = {'x': 0.,'y': 0.,'z': 6.0}
         hit = True
 
     if hit == True:
@@ -214,7 +214,7 @@ while run:
         index = 0
         
         for point in points:
-            q_value = 6
+            q_value = camera['z']
             z_cord = 1/(q_value - 0.05*point[2][0]) #point[2][0] means z coordinate of the point
             # z_cord = 1/point[2][0]
             projection_matrix = [[z_cord, 0, 0], [0, z_cord, 0]]
