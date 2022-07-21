@@ -2,7 +2,7 @@ import pygame
 import math
 from matrix import matrix_multiplication
 from visibleSurfaceDetection import returnVisibleSurfaces
-from angle import returnAngle
+from angle import returnAngle, returnDistance
 from bresenham_line import lineBanau
 import time
 import os
@@ -29,6 +29,7 @@ x2, y2 = 2, 2
 tamper_points = []
 faces = []
 def declareFaces(tampered_points):
+    """ assignes coordinates to faces"""
     global faces
     top = [tampered_points[8], tampered_points[9], tampered_points[10], tampered_points[11]]
     bottom = [tampered_points[12], tampered_points[13], tampered_points[14], tampered_points[15]]
@@ -214,7 +215,7 @@ while run:
         index = 0
         
         for point in points:
-            q_value = camera['z']
+            q_value = returnDistance(camera)
             z_cord = 1/(q_value - 0.05*point[2][0]) #point[2][0] means z coordinate of the point
             # z_cord = 1/point[2][0]
             projection_matrix = [[z_cord, 0, 0], [0, z_cord, 0]]
