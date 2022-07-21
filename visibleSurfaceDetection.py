@@ -18,7 +18,7 @@ def returnVisibleSurfaces(surfaces, cam):
     print("plane_coefficients = ",plane_coefficients)
     print("coefficients = ",coefficients)
     
-    for i in range(0, 6, 2):
+    for i in range(2, 6, 2):
         if abs(coefficients[i]) > abs(coefficients[i+1]):
             return_coefficients[i] = 0
             return_coefficients[i+1] = 1
@@ -27,7 +27,8 @@ def returnVisibleSurfaces(surfaces, cam):
             return_coefficients[i+1] = 0
         else:
             return_coefficients[i] = return_coefficients[i+1] = 0
-
+    return_coefficients[1] = 0
+    return_coefficients[0] = 1 if cam['z'] > 1.5 else 0
     print("return coefficients = ",return_coefficients)
     return return_coefficients
 

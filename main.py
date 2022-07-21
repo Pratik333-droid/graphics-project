@@ -2,12 +2,13 @@ import pygame
 import math
 from matrix import matrix_multiplication
 from visibleSurfaceDetection import returnVisibleSurfaces
+from angle import returnAngle
 from bresenham_line import lineBanau
 import time
-# import os
+import os
 
 pygame.init()
-# os.environ["SDL_VIDEO_CENTERED"] = '1'
+os.environ["SDL_VIDEO_CENTERED"] = '1'
 pygame.display.set_caption("Pulchowk Boys Hostel Projection")
 
 width, height = 1200, 600
@@ -18,7 +19,7 @@ black, white, blue, green = (40, 40, 40), (230, 230, 230), (0, 154, 255), (30, 2
 cube_position = [width//2, height//2]
 scale = 400
 points = [n for n in range(16)]
-angle_x, angle_y, angle_z = 0.0, 0.0, 0.0
+angle_x, angle_y = 0.0, 0.0
 projected_points = [_ for _ in range(16)]
 run = True
 x_cordy = 2
@@ -127,16 +128,13 @@ def drawBack():
         connect_point(14, 15, projected_points)
         connect_point(15, 11, projected_points)
 
-def returnRotationMatrices(x, y, z):
+def returnRotationMatrices(x, y):
     return_matrix = [[[1, 0, 0],
                 [0, round(math.cos(x), 4), round(-math.sin(x), 4)],
                 [0, round(math.sin(x), 4), round(math.cos(x), 4)]], 
                 [[round(math.cos(y), 4), 0, round(-math.sin(y), 4)],
                 [0, 1, 0],
-                [round(math.sin(y), 4), 0, round(math.cos(y), 4)]],
-                [[round(math.cos(z), 4), round(-math.sin(z), 4), 0],
-                [round(math.sin(z), 4), round(math.cos(z), 4), 0],
-                [0, 0, 1]]]
+                [round(math.sin(y), 4), 0, round(math.cos(y), 4)]]]
     return return_matrix
 
 initializePoints()
@@ -155,45 +153,55 @@ while run:
     
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
-        # camera['x'] -= 0.5 * 0.05
-        angle_x += 0.05
+        camera['x'] -= 0.5 * 0.05
+        angle_y = returnAngle(camera['x'], camera['z'] - z)
+        # if angle_y < -1.4:
+        #     angle_y = -1.4
         # angle_y, angle_z = 0.0, 0.0
         # distance = calcDistance(camera, points[8])
         
         hit = True
     elif keys[pygame.K_d]:
-        # camera['x'] += 0.5 * 0.05
-        angle_x -= 0.05
+        camera['x'] += 0.5 * 0.05
+        angle_y = returnAngle(camera['x'], camera['z'] - z)
+        # if angle_y > 1.4:
+        #     angle_y = 1.4
         # angle_y, angle_z = 0.0, 0.0
         # distance = calcDistance(camera, points[8])
         hit = True
 
     if keys[pygame.K_w]:
-        # camera['y'] -= 0.5 * 0.05
-        angle_y += 0.05
+        camera['y'] -= 0.5 * 0.05
+        angle_x = returnAngle(camera['y'], camera['z'] - z)
         # angle_x, angle_z = 0.0, 0.0
         # distance = calcDistance(camera, points[8])
         hit = True
     elif keys[pygame.K_s]:
-        # camera['y'] += 0.5 * 0.05
-        angle_y -= 0.05
+        camera['y'] += 0.5 * 0.05
+        angle_x = returnAngle(camera['y'], camera['z'] - z)
         # angle_x, angle_z = 0.0, 0.0
         # distance = calcDistance(camera, points[8])
         hit = True
     # print("camera = ",camera)
 
     if keys[pygame.K_UP]:
-        # camera['z'] += 0.5 * 0.05
-        angle_z += 0.05
+        camera['z'] += 0.5 * 0.05
+        angle_x = returnAngle(camera['y'], camera['z'] - z)
+        angle_y = returnAngle(camera['x'], camera['z'] - z)
+        # angle_z += 0.05
         # distance = calcDistance(camera, points[8])
         hit = True
     elif keys[pygame.K_DOWN]:
-        # camera['z'] -= 0.5 * 0.05
-        angle_z -= 0.05
+        camera['z'] -= 0.5 * 0.05
+        if camera['z'] < 1.51:
+            camera['z'] = 1.51
+        angle_x = returnAngle(camera['y'], camera['z'] - z)
+        angle_y = returnAngle(camera['x'], camera['z'] - z)
+        # angle_z -= 0.05
         # distance = calcDistance(camera, points[8])
         hit = True
     if keys[pygame.K_n]:
-        angle_x, angle_y, angle_z = 0.0, 0.0, 0.0
+        angle_x, angle_y = 0.0, 0.0
         initializePoints()
         print("Points initialized")
         print("points = ", points)
@@ -202,26 +210,29 @@ while run:
 
     if hit == True:
         tamper_points = []
+        unscaled_projected_2d = []
         index = 0
         
         for point in points:
-            distance = 6
-            z_cord = 1/(distance - 0.2*point[2][0]) #point[2][0] means z coordinate of the point
+            q_value = 6
+            z_cord = 1/(q_value - 0.05*point[2][0]) #point[2][0] means z coordinate of the point
+            # z_cord = 1/point[2][0]
             projection_matrix = [[z_cord, 0, 0], [0, z_cord, 0]]
-            rotation_matrix = returnRotationMatrices(angle_x, angle_y, angle_z)
+            rotation_matrix = returnRotationMatrices(angle_x, angle_y)
             rotated_point = matrix_multiplication(rotation_matrix[0], point)
             rotated_point = matrix_multiplication(rotation_matrix[1], rotated_point)
-            rotated_point = matrix_multiplication(rotation_matrix[2], rotated_point)
+            # rotated_point = matrix_multiplication(rotation_matrix[2], rotated_point)
             projected_2d = matrix_multiplication(projection_matrix, rotated_point)
             tamper_points.append(rotated_point)
-            print("projected 2d = ", projected_2d)
-            print("rotated points = ", rotated_point)
-            x_cord = int((projected_2d[0][0])* scale) + cube_position[0]
-            y_cord = int((projected_2d[1][0])* scale) + cube_position[1]
+            unscaled_projected_2d.append(projected_2d)
+            # print("projected 2d = ", projected_2d)
+            # print("rotated points = ", rotated_point)
+            x_cord = int((projected_2d[0][0] - camera['x'])* scale) + cube_position[0]
+            y_cord = int((projected_2d[1][0] - camera['y'])* scale) + cube_position[1]
             # x = int((projected_2d[0][0] -camera["x"])* scale) + cube_position[0]
             # y = int((projected_2d[1][0] - camera["y"])* scale) + cube_position[1]
             # print(f"x = {x_cord}, y = {y_cord}")
-            print("index =",index)
+            # print("index =",index)
             projected_points[index] = [x_cord, y_cord]
             index += 1
             # print("projected points = ", projected_points)
@@ -229,6 +240,13 @@ while run:
             # print ("This")
         declareFaces(tamper_points)
         # print("faces = ",faces)
+        print("unscaled projected 2d = ", unscaled_projected_2d)
+        print("")
+        print("actual points = ",tamper_points)
+        print("")
+        print("scaled projected points = ",projected_points)
+        print("angle_x = ", angle_x, "angle_y = ", angle_y)
+        print("camera = ",camera)
         buildShape()
         pygame.draw.circle(screen, green, (int(camera['x']*scale + cube_position[0]), int(camera['y']*scale + cube_position[1])), 10)
         pygame.display.update()
