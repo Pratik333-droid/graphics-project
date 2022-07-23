@@ -19,7 +19,7 @@ black, white, blue, green = (40, 40, 40), (230, 230, 230), (0, 154, 255), (30, 2
 cube_position = [width//2, height//2]
 scale = 400
 points = [n for n in range(24)]
-angle_x, angle_y = 0.0, 0.0
+angle_x, angle_y, angle_z = 0.0, 0.0, 0.0
 projected_points = [_ for _ in range(24)]
 run = True
 x_cordy = 2
@@ -95,16 +95,16 @@ def buildShape():
     elif visible_surfaces[1] == 1:
         drawBottom()
         print("bottom drawn")
-    if visible_surfaces[2] == 1:
+    if visible_surfaces[2] == 1 and (abs(camera['x']) > 0.173):
         drawLeft()
         print("left drawn")
-    elif visible_surfaces[3] == 1:
+    elif visible_surfaces[3] == 1 and (camera['x'] > 0.173):
         drawRight()
         print("right drawn")
-    if visible_surfaces[4] == 1:
+    if visible_surfaces[4] == 1 and (abs(camera['y']) > 0.173):
         print("front drawn")
         drawFront()
-    elif visible_surfaces[5] == 1:
+    elif visible_surfaces[5] == 1 and (camera['y'] > 0.173):
         print("back drawn")
         drawBack()
     
