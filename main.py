@@ -18,13 +18,13 @@ fps = 60
 black, white, blue, green = (40, 40, 40), (230, 230, 230), (0, 154, 255), (30, 200, 30)
 cube_position = [width//2, height//2]
 scale = 400
-points = [n for n in range(16)]
+points = [n for n in range(24)]
 angle_x, angle_y = 0.0, 0.0
-projected_points = [_ for _ in range(16)]
+projected_points = [_ for _ in range(24)]
 run = True
 x_cordy = 2
 camera = {'x': 0.0,'y': 0.0,'z': 6.0}
-x, y, z = 1, 1, 1.5
+x, y, z = 1, 1, 2
 x2, y2 = 2, 2
 tamper_points = []
 faces = []
@@ -58,12 +58,21 @@ def initializePoints():
     points[14] = [[x2], [y2], [-z]]
     points[15] = [[-x2], [y2], [-z]]
 
+    points[16] = [[-x2], [-y2], [-z + 2/3*2*z]]
+    points[17] = [[x2], [-y2], [-z + 2/3*2*z]]
+    points[18] = [[x2], [y2], [-z + 2/3*2*z]]
+    points[19] = [[-x2], [y2], [-z + 2/3*2*z]]
+    points[20] = [[-x2], [-y2], [-z + 1/3*2*z]]
+    points[21] = [[x2], [-y2], [-z + 1/3*2*z]]
+    points[22] = [[x2], [y2], [-z + 1/3*2*z]]
+    points[23] = [[-x2], [y2], [-z + 1/3*2*z]]
 
-def connect_point(x_index, y_index, projected_2d_coordinates):
-    coordinate_x = projected_2d_coordinates[x_index]
-    coordinate_y = projected_2d_coordinates[y_index]
+
+def connect_point(first_coordinate_index, second_coordinate_index, projected_2d_coordinates):
+    first_coordinate = projected_2d_coordinates[first_coordinate_index]
+    second_coordinate = projected_2d_coordinates[second_coordinate_index]
     # pygame.draw.line(screen, white, (a[0], a[1]), (b[0], b[1]), 1)
-    lineBanau(screen, coordinate_x, coordinate_y, white)
+    lineBanau(screen, first_coordinate, second_coordinate, white)
 
 def buildShape():
     # the following piece of code draws lines between all the vertices
@@ -113,21 +122,33 @@ def drawLeft():
         connect_point(15, 12, projected_points)
         connect_point(12, 8, projected_points)
 
+        connect_point(19, 16, projected_points)
+        connect_point(23, 20, projected_points)
+
 def drawRight():
         connect_point(9, 10, projected_points)
         connect_point(10, 14, projected_points)
         connect_point(14, 13, projected_points)
         connect_point(13, 9, projected_points)
+
+        connect_point(17, 18, projected_points)
+        connect_point(21, 22, projected_points)
 def drawFront():
         connect_point(8, 9, projected_points)
         connect_point(9, 13, projected_points)
         connect_point(13, 12, projected_points)
         connect_point(12, 8, projected_points)
+
+        connect_point(16, 17, projected_points)
+        connect_point(20, 21, projected_points)
 def drawBack():
         connect_point(11, 10, projected_points)
         connect_point(10, 14, projected_points)
         connect_point(14, 15, projected_points)
         connect_point(15, 11, projected_points)
+
+        connect_point(18, 19, projected_points)
+        connect_point(22, 23, projected_points)
 
 def returnRotationMatrices(x, y):
     return_matrix = [[[1, 0, 0],
@@ -216,7 +237,7 @@ while run:
         
         for point in points:
             q_value = returnDistance(camera)
-            z_cord = 1/(q_value - 0.05*point[2][0]) #point[2][0] means z coordinate of the point
+            z_cord = 1/(q_value - 0.15*point[2][0]) #point[2][0] means z coordinate of the point
             # z_cord = 1/point[2][0]
             projection_matrix = [[z_cord, 0, 0], [0, z_cord, 0]]
             rotation_matrix = returnRotationMatrices(angle_x, angle_y)
