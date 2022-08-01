@@ -2,18 +2,18 @@ import pygame
 import math
 from matrix import matrix_multiplication
 from visibleSurfaceDetection import returnVisibleSurfaces
-from surface_coloring import colorSurfaces
+# from surface_coloring import colorSurfaces
 from angle import returnAngle, returnDistance
-from bresenham_line import lineBanau
+from bresenham_line import lineBanau, returnLineCoordinates
 import time
 import os
-import sys
-sys.setrecursionlimit(10**6)
+# import sys
+# sys.setrecursionlimit(10**6)
 pygame.init()
 os.environ["SDL_VIDEO_CENTERED"] = '1'
 pygame.display.set_caption("Skeletal Representation of Pulchowk Boys Hostel Lite")
 
-width, height = 900, 600
+width, height = 1920, 1080
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 fps = 60
@@ -80,23 +80,33 @@ def buildShape():
     visible_surfaces = returnVisibleSurfaces(faces, camera)
     if visible_surfaces[0] == 1:
         drawTop()
-        print("top drawn")
+        # print("top drawn")
     elif visible_surfaces[1] == 1:
         drawBottom()
-        print("bottom drawn")
+        # print("bottom drawn")
     if visible_surfaces[2] == 1 and (abs(camera['x']) > 0.173):
         drawLeft()
-        print("left drawn")
+        # print("left drawn")
     elif visible_surfaces[3] == 1 and (camera['x'] > 0.173):
         drawRight()
-        print("right drawn")
+        # print("right drawn")
     if visible_surfaces[4] == 1 and (abs(camera['y']) > 0.173):
-        print("front drawn")
+        # print("front drawn")
         drawFront()
     elif visible_surfaces[5] == 1 and (camera['y'] > 0.173):
-        print("back drawn")
+        # print("back drawn")
         drawBack()
     
+
+def colorSurface (surface, fill_color):
+        arr1 = returnLineCoordinates(surface[0], surface[2])
+        arr2 = returnLineCoordinates(surface[1], surface[3])
+        len1 = len(arr1)
+        len2 = len(arr2)
+        n = len1 if len1 < len2 else len2
+        for i in range(n):
+            lineBanau(screen, arr1[i], arr2[i], fill_color)
+
 
 def drawTop():
     for m in range(4):
@@ -113,6 +123,13 @@ def drawLeft():
 
         connect_point(19, 16, projected_points)
         connect_point(23, 20, projected_points)
+        fill_color = (150, 75, 30)
+        layer1 = [projected_points[11], projected_points[8], projected_points[19], projected_points[16]]
+        layer2 = [projected_points[19], projected_points[16], projected_points[23], projected_points[20]]
+        layer3 = [projected_points[23], projected_points[20], projected_points[15], projected_points[12]]
+        colorSurface(layer1, fill_color)
+        colorSurface(layer2, fill_color)
+        colorSurface(layer3, fill_color)
 
 def drawRight():
         
@@ -123,6 +140,14 @@ def drawRight():
 
         connect_point(17, 18, projected_points)
         connect_point(21, 22, projected_points)
+        fill_color = (150, 75, 30)
+        layer1 = [projected_points[9], projected_points[10], projected_points[17], projected_points[18]]
+        layer2 = [projected_points[17], projected_points[18], projected_points[21], projected_points[22]]
+        layer3 = [projected_points[21], projected_points[22], projected_points[13], projected_points[14]]
+        colorSurface(layer1, fill_color)
+        colorSurface(layer2, fill_color)
+        colorSurface(layer3, fill_color)
+
 def drawFront():
         connect_point(8, 9, projected_points)
         connect_point(9, 13, projected_points)
@@ -132,11 +157,15 @@ def drawFront():
         connect_point(16, 17, projected_points)
         connect_point(20, 21, projected_points)
 
-        # layer1 = [projected_points[8], projected_points[9], projected_points[16], projected_points[17]]
-        # layer2 = [projected_points[16], projected_points[17], projected_points[20], projected_points[21]]
-        # layer3 = [projected_points[20], projected_points[21], projected_points[12], projected_points[13]]
-        # fill_color = (150, 75, 30)
-        # colorSurfaces(screen, layer1, fill_color, boundary_color)
+        fill_color = (150, 75, 30)
+        layer1 = [projected_points[8], projected_points[9], projected_points[16], projected_points[17]]
+        layer2 = [projected_points[16], projected_points[17], projected_points[20], projected_points[21]]
+        layer3 = [projected_points[20], projected_points[21], projected_points[12], projected_points[13]]
+    
+        colorSurface(layer1, fill_color)
+        colorSurface(layer2, fill_color)
+        colorSurface(layer3, fill_color)
+
 
 def drawBack():
         connect_point(11, 10, projected_points)
@@ -146,6 +175,14 @@ def drawBack():
 
         connect_point(18, 19, projected_points)
         connect_point(22, 23, projected_points)
+
+        fill_color = (150, 75, 30)
+        layer1 = [projected_points[10], projected_points[11], projected_points[18], projected_points[19]]
+        layer2 = [projected_points[18], projected_points[19], projected_points[22], projected_points[23]]
+        layer3 = [projected_points[22], projected_points[23], projected_points[14], projected_points[15]]
+        colorSurface(layer1, fill_color)
+        colorSurface(layer2, fill_color)
+        colorSurface(layer3, fill_color)
 
 def returnRotationMatrices(x, y):
     return_matrix = [[[1, 0, 0],
@@ -223,8 +260,8 @@ while run:
     if keys[pygame.K_n]:
         angle_x, angle_y = 0.0, 0.0
         initializePoints()
-        print("Points initialized")
-        print("points = ", points)
+        # print("Points initialized")
+        # print("points = ", points)
         camera = {'x': 0.,'y': 0.,'z': 6.0}
         hit = True
 
@@ -260,13 +297,13 @@ while run:
             # print ("This")
         declareFaces(tamper_points)
         # print("faces = ",faces)
-        print("unscaled projected 2d = ", unscaled_projected_2d)
-        print("")
-        print("actual points = ",tamper_points)
-        print("")
-        print("scaled projected points = ",projected_points)
-        print("angle_x = ", angle_x, "angle_y = ", angle_y)
-        print("camera = ",camera)
+        # print("unscaled projected 2d = ", unscaled_projected_2d)
+        # print("")
+        # print("actual points = ",tamper_points)
+        # print("")
+        # print("scaled projected points = ",projected_points)
+        # print("angle_x = ", angle_x, "angle_y = ", angle_y)
+        # print("camera = ",camera)
         buildShape()
         pygame.draw.circle(screen, green, (int(camera['x']*scale + cube_position[0]), int(camera['y']*scale + cube_position[1])), 10)
         pygame.display.update()
