@@ -2,7 +2,7 @@
 # import pygame
 from pygame import gfxdraw
 # import time
-
+boundary_color = (230, 230, 230)
 def lineBanau(parda, cordy1, cordy2, color):
     
     x1 = cordy1[0]

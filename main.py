@@ -2,20 +2,22 @@ import pygame
 import math
 from matrix import matrix_multiplication
 from visibleSurfaceDetection import returnVisibleSurfaces
+from surface_coloring import colorSurfaces
 from angle import returnAngle, returnDistance
 from bresenham_line import lineBanau
 import time
 import os
-
+import sys
+sys.setrecursionlimit(10**6)
 pygame.init()
 os.environ["SDL_VIDEO_CENTERED"] = '1'
-pygame.display.set_caption("Pulchowk Boys Hostel Projection")
+pygame.display.set_caption("Skeletal Representation of Pulchowk Boys Hostel Lite")
 
-width, height = 1200, 600
+width, height = 900, 600
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 fps = 60
-black, white, blue, green = (40, 40, 40), (230, 230, 230), (0, 154, 255), (30, 200, 30)
+black, boundary_color, blue, green = (40, 40, 40), (230, 230, 230), (0, 154, 255), (30, 200, 30)
 cube_position = [width//2, height//2]
 scale = 400
 points = [n for n in range(24)]
@@ -72,22 +74,9 @@ def connect_point(first_coordinate_index, second_coordinate_index, projected_2d_
     first_coordinate = projected_2d_coordinates[first_coordinate_index]
     second_coordinate = projected_2d_coordinates[second_coordinate_index]
     # pygame.draw.line(screen, white, (a[0], a[1]), (b[0], b[1]), 1)
-    lineBanau(screen, first_coordinate, second_coordinate, white)
+    lineBanau(screen, first_coordinate, second_coordinate, boundary_color)
 
 def buildShape():
-    # the following piece of code draws lines between all the vertices
-    # ---------------------------------------------------------------------------------
-    # for m in range(4):
-    #     connect_point(m, (m+1)%4, projected_points)
-    #     connect_point(m+4, (m+1)%4 + 4, projected_points)
-    #     connect_point(m, m+4, projected_points)
-    # for m in range(4):
-    #     connect_point(m + 8, (m+1)%4 + 8, projected_points)
-    #     connect_point(m+4 + 8, (m+1)%4 + 4 +8, projected_points)
-    #     connect_point(m + 8, m+4 + 8, projected_points)
-    # print ("faces = ",faces)
-    # ---------------------------------------------------------------------------------
-
     visible_surfaces = returnVisibleSurfaces(faces, camera)
     if visible_surfaces[0] == 1:
         drawTop()
@@ -126,6 +115,7 @@ def drawLeft():
         connect_point(23, 20, projected_points)
 
 def drawRight():
+        
         connect_point(9, 10, projected_points)
         connect_point(10, 14, projected_points)
         connect_point(14, 13, projected_points)
@@ -141,6 +131,13 @@ def drawFront():
 
         connect_point(16, 17, projected_points)
         connect_point(20, 21, projected_points)
+
+        # layer1 = [projected_points[8], projected_points[9], projected_points[16], projected_points[17]]
+        # layer2 = [projected_points[16], projected_points[17], projected_points[20], projected_points[21]]
+        # layer3 = [projected_points[20], projected_points[21], projected_points[12], projected_points[13]]
+        # fill_color = (150, 75, 30)
+        # colorSurfaces(screen, layer1, fill_color, boundary_color)
+
 def drawBack():
         connect_point(11, 10, projected_points)
         connect_point(10, 14, projected_points)
@@ -159,6 +156,7 @@ def returnRotationMatrices(x, y):
                 [round(math.sin(y), 4), 0, round(math.cos(y), 4)]]]
     return return_matrix
 
+
 initializePoints()
 while run:
     hit = False
@@ -176,7 +174,7 @@ while run:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
         camera['x'] -= 0.5 * 0.05
-        angle_y = returnAngle(camera['x'], camera['z'] - z)
+        angle_y = returnAngle(camera['x'], camera['z'] - z)*1.2
         # if angle_y < -1.4:
         #     angle_y = -1.4
         # angle_y, angle_z = 0.0, 0.0
@@ -185,7 +183,7 @@ while run:
         hit = True
     elif keys[pygame.K_d]:
         camera['x'] += 0.5 * 0.05
-        angle_y = returnAngle(camera['x'], camera['z'] - z)
+        angle_y = returnAngle(camera['x'], camera['z'] - z)*1.2
         # if angle_y > 1.4:
         #     angle_y = 1.4
         # angle_y, angle_z = 0.0, 0.0
@@ -194,13 +192,13 @@ while run:
 
     if keys[pygame.K_w]:
         camera['y'] -= 0.5 * 0.05
-        angle_x = returnAngle(camera['y'], camera['z'] - z)
+        angle_x = returnAngle(camera['y'], camera['z'] - z)*1.2
         # angle_x, angle_z = 0.0, 0.0
         # distance = calcDistance(camera, points[8])
         hit = True
     elif keys[pygame.K_s]:
         camera['y'] += 0.5 * 0.05
-        angle_x = returnAngle(camera['y'], camera['z'] - z)
+        angle_x = returnAngle(camera['y'], camera['z'] - z)*1.2
         # angle_x, angle_z = 0.0, 0.0
         # distance = calcDistance(camera, points[8])
         hit = True
@@ -208,8 +206,8 @@ while run:
 
     if keys[pygame.K_UP]:
         camera['z'] += 0.5 * 0.05
-        angle_x = returnAngle(camera['y'], camera['z'] - z)
-        angle_y = returnAngle(camera['x'], camera['z'] - z)
+        angle_x = returnAngle(camera['y'], camera['z'] - z)*1.2
+        angle_y = returnAngle(camera['x'], camera['z'] - z)*1.2
         # angle_z += 0.05
         # distance = calcDistance(camera, points[8])
         hit = True
@@ -217,8 +215,8 @@ while run:
         camera['z'] -= 0.5 * 0.05
         if camera['z'] < 1.55:
             camera['z'] = 1.55
-        angle_x = returnAngle(camera['y'], camera['z'] - z)
-        angle_y = returnAngle(camera['x'], camera['z'] - z)
+        angle_x = returnAngle(camera['y'], camera['z'] - z)*1.2
+        angle_y = returnAngle(camera['x'], camera['z'] - z)*1.2
         # angle_z -= 0.05
         # distance = calcDistance(camera, points[8])
         hit = True
@@ -249,8 +247,8 @@ while run:
             unscaled_projected_2d.append(projected_2d)
             # print("projected 2d = ", projected_2d)
             # print("rotated points = ", rotated_point)
-            x_cord = int((projected_2d[0][0] - camera['x'])* scale) + cube_position[0]
-            y_cord = int((projected_2d[1][0] - camera['y'])* scale) + cube_position[1]
+            x_cord = int((projected_2d[0][0] - 0.7*camera['x'])* scale) + cube_position[0]
+            y_cord = int((projected_2d[1][0] - 0.7*camera['y'])* scale) + cube_position[1]
             # x = int((projected_2d[0][0] -camera["x"])* scale) + cube_position[0]
             # y = int((projected_2d[1][0] - camera["y"])* scale) + cube_position[1]
             # print(f"x = {x_cord}, y = {y_cord}")
@@ -272,5 +270,3 @@ while run:
         buildShape()
         pygame.draw.circle(screen, green, (int(camera['x']*scale + cube_position[0]), int(camera['y']*scale + cube_position[1])), 10)
         pygame.display.update()
-
-# time.sleep(15)
