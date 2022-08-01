@@ -5,10 +5,10 @@ boundary_color = (230, 230, 230)
 inner_top_color = (40, 40, 41)
 def lineBanau(parda, cordy1, cordy2, color):
     
-    x1 = cordy1[0]+1
-    y1 = cordy1[1]+1
-    x2 = cordy2[0]-1
-    y2 = cordy2[1]-1
+    x1 = cordy1[0]
+    y1 = cordy1[1]
+    x2 = cordy2[0]
+    y2 = cordy2[1]
     k = 0
     dx = abs(x2-x1)
     dy = abs(y2-y1)
