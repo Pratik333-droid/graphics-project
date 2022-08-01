@@ -112,6 +112,16 @@ def drawTop():
     for m in range(4):
         connect_point(m, (m+1)%4, projected_points)
         connect_point(m + 8, (m+1)%4 + 8, projected_points)
+
+    inner_top_surface = [projected_points[0], projected_points[1], projected_points[3], projected_points[2]]
+    outer_top_surface = [projected_points[8], projected_points[9], projected_points[11], projected_points[10]]
+
+    inner_top_color = (40, 40, 41)
+    roof_color = (179, 147, 124)
+    colorSurface(outer_top_surface, roof_color)
+    colorSurface(inner_top_surface, inner_top_color)
+
+
 def drawBottom():
     for m in range(0, 4):
         connect_point(m+12, (m+1)%4 + 12, projected_points)
